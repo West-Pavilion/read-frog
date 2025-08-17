@@ -65,6 +65,9 @@ options:
         range:
           main: Main Content
           all: All Content
+      selectionToolbar:
+        title: Text Selection Translation
+        enableTextSelection: Enable text selection toolbar
     resetConfig:
       title: Reset Config
       description: Reset all config to default value

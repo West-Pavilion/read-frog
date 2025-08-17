@@ -48,14 +48,7 @@ export default function TranslateProviderSelector() {
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectGroup>
-            <SelectLabel>{i18n.t('translateService.aiTranslator')}</SelectLabel>
-            {Object.entries(LLM_TRANSLATE_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
-              <SelectItem key={value} value={value}>
-                <ProviderIcon logo={logo} name={name} />
-              </SelectItem>
-            ))}
-          </SelectGroup>
+
           <SelectGroup>
             <SelectLabel>{i18n.t('translateService.normalTranslator')}</SelectLabel>
             {Object.entries(PURE_TRANSLATE_PROVIDER_ITEMS).map(([value, { logo, name }]) => (

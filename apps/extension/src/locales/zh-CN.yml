@@ -65,6 +65,9 @@ options:
         range:
           main: 主要内容
           all: 所有内容
+      selectionToolbar:
+        title: 划词翻译
+        enableTextSelection: 启用划词翻译工具栏
     resetConfig:
       title: 恢复默认配置
       description:

@@ -29,6 +29,7 @@ export default function TranslationConfig() {
         <TranslateProviderSelector />
         <TranslateModelSelector />
         <RangeSelector />
+        <SelectionToolbarSelector />
       </div>
     </ConfigCard>
   )
@@ -99,14 +100,6 @@ function TranslateProviderSelector() {
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectGroup>
-            <SelectLabel>{i18n.t('translateService.aiTranslator')}</SelectLabel>
-            {Object.entries(LLM_TRANSLATE_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
-              <SelectItem key={value} value={value}>
-                <ProviderIcon logo={logo} name={name} />
-              </SelectItem>
-            ))}
-          </SelectGroup>
           <SelectGroup>
             <SelectLabel>{i18n.t('translateService.normalTranslator')}</SelectLabel>
             {Object.entries(PURE_TRANSLATE_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
@@ -206,6 +199,30 @@ function TranslateModelSelector() {
           className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
         >
           {i18n.t('options.general.translationConfig.model.enterCustomModel')}
+        </label>
+      </div>
+    </FieldWithLabel>
+  )
+}
+
+function SelectionToolbarSelector() {
+  const [selectionToolbar, setSelectionToolbar] = useAtom(configFields.selectionToolbar)
+  
+  return (
+    <FieldWithLabel id="selectionToolbar" label={i18n.t('options.general.translationConfig.selectionToolbar.title')}>
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="selectionToolbarEnabled"
+          checked={selectionToolbar.enabled}
+          onCheckedChange={(checked) => {
+            setSelectionToolbar({ enabled: !!checked })
+          }}
+        />
+        <label
+          htmlFor="selectionToolbarEnabled"
+          className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+        >
+          {i18n.t('options.general.translationConfig.selectionToolbar.enableTextSelection')}
         </label>
       </div>
     </FieldWithLabel>

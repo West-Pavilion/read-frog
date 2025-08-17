@@ -109,7 +109,7 @@ export const DEFAULT_CONFIG: Config = {
     position: 0.66,
   },
   selectionToolbar: {
-    enabled: true,
+    enabled: false,
   },
   sideContent: {
     width: DEFAULT_SIDE_CONTENT_WIDTH,
