@@ -11,9 +11,6 @@ interface ProtocolMap {
   setEnablePageTranslation: (data: { tabId: number, enabled: boolean }) => void
   setEnablePageTranslationOnContentScript: (data: { enabled: boolean }) => void
   resetPageTranslationOnNavigation: (data: { url: string }) => void
-  // read article
-  readArticle: () => void
-  popupRequestReadArticle: (data: { tabId: number }) => void
   // user guide
   pinStateChanged: (data: { isPinned: boolean }) => void
   getPinState: () => boolean

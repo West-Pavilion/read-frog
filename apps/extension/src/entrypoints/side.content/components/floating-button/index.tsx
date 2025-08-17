@@ -5,19 +5,22 @@ import { useEffect, useRef } from 'react'
 import readFrogLogo from '@/assets/icons/read-frog.png'
 import { configFields } from '@/utils/atoms/config'
 import { APP_NAME } from '@/utils/constants/app'
+import { removeAllTranslatedWrapperNodes } from '@/utils/host/translate/node-manipulation'
+import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
 import { sendMessage } from '@/utils/message'
-import { isDraggingButtonAtom, isSideOpenAtom } from '../../atoms'
+import { enablePageTranslationAtom, isDraggingButtonAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
-import FloatingReadButton from './floating-read-button'
 import TranslateButton from './translate-button'
 
 export default function FloatingButton() {
   const [floatingButton, setFloatingButton] = useAtom(
     configFields.floatingButton,
   )
-  const sideContent = useAtomValue(configFields.sideContent)
-  const [isSideOpen, setIsSideOpen] = useAtom(isSideOpenAtom)
   const [isDraggingButton, setIsDraggingButton] = useAtom(isDraggingButtonAtom)
+  const enablePageTranslation = useAtomValue(enablePageTranslationAtom)
+  const providersConfig = useAtomValue(configFields.providersConfig)
+  const translateConfig = useAtomValue(configFields.translate)
+  const languageConfig = useAtomValue(configFields.language)
   const initialClientYRef = useRef<number | null>(null)
 
   // 按钮拖动处理
@@ -78,9 +81,26 @@ export default function FloatingButton() {
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
 
-      // 只有未移动过才触发点击
+      // 只有未移动过才触发翻译功能
       if (!hasMoved) {
-        setIsSideOpen(o => !o)
+        if (!enablePageTranslation) {
+          if (!validateTranslationConfig({
+            providersConfig,
+            translate: translateConfig,
+            language: languageConfig,
+          })) {
+            return
+          }
+          sendMessage('setEnablePageTranslationOnContentScript', {
+            enabled: true,
+          })
+        }
+        else {
+          removeAllTranslatedWrapperNodes()
+          sendMessage('setEnablePageTranslationOnContentScript', {
+            enabled: false,
+          })
+        }
       }
     }
 
@@ -96,19 +116,16 @@ export default function FloatingButton() {
     <div
       className="group fixed z-[2147483647] flex flex-col items-end gap-2 print:hidden"
       style={{
-        right: isSideOpen
-          ? `calc(${sideContent.width}px + var(--removed-body-scroll-bar-size, 0px))`
-          : 'var(--removed-body-scroll-bar-size, 0px)',
+        right: 'var(--removed-body-scroll-bar-size, 0px)',
         top: `${floatingButton.position * 100}vh`,
       }}
     >
-      <FloatingReadButton />
       <TranslateButton />
       <div
         className={cn(
           'border-border flex h-10 w-15 items-center rounded-l-full border border-r-0 bg-white opacity-60 shadow-lg group-hover:opacity-100 dark:bg-neutral-900',
           'translate-x-5 transition-transform duration-300 group-hover:translate-x-0',
-          isSideOpen && 'opacity-100',
+          enablePageTranslation && 'opacity-100',
           isDraggingButton ? 'cursor-move' : 'cursor-pointer',
           isDraggingButton ? 'translate-x-0' : '',
         )}
@@ -132,6 +149,13 @@ export default function FloatingButton() {
           src={readFrogLogo}
           alt={APP_NAME}
           className="ml-[5px] h-8 w-8 rounded-full"
+        />
+        <Icon
+          icon="tabler:check"
+          className={cn(
+            'absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full bg-green-500 text-white',
+            enablePageTranslation ? 'block' : 'hidden',
+          )}
         />
       </div>
       <HiddenButton

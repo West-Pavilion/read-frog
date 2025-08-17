@@ -19,7 +19,6 @@
     "lint:fix": "eslint . --fix && turbo lint:fix",
     "syncpack:lint": "syncpack lint",
     "syncpack:fix": "syncpack fix-mismatches",
-    "prepare": "husky",
     "release": "changeset tag && git push origin --tags",
     "test": "turbo test",
     "type-check": "turbo type-check",
@@ -32,7 +31,6 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@repo/eslint-config": "workspace:*",
     "eslint": "^9.32.0",
-    "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
     "syncpack": "^13.0.4",
     "turbo": "^2.5.5",
@@ -41,7 +39,7 @@
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": "^22.18.0",
+      "version": "^22.17.0",
       "onFail": "download"
     }
   }
