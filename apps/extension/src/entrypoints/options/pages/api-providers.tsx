@@ -15,7 +15,7 @@ import { PageLayout } from '../components/page-layout'
 export function ApiProvidersPage() {
   return (
     <PageLayout title={i18n.t('options.apiProviders.title')} innerClassName="[&>*]:border-b [&>*:last-child]:border-b-0">
-      {API_PROVIDER_NAMES.map(provider => (
+      {API_PROVIDER_NAMES.filter(name => name === "deeplx").map(provider => (
         <ProviderConfigCard key={provider} provider={provider} />
       ))}
     </PageLayout>
